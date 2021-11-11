@@ -88,6 +88,9 @@
     <Compile Include="SubType.cs">
       <DependentUpon>StoreFront.tt</DependentUpon>
     </Compile>
+    <Compile Include="UserDetail.cs">
+      <DependentUpon>StoreFront.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="StoreFront.edmx">

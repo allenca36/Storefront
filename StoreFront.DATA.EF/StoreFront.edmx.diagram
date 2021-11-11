@@ -17,6 +17,7 @@
         <AssociationConnector Association="StoreFrontModel.FK_Employees_Roles" ManuallyRouted="false" />
         <AssociationConnector Association="StoreFrontModel.FK_Products_ProductType" ManuallyRouted="false" />
         <AssociationConnector Association="StoreFrontModel.FK_Products_Status" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="StoreFrontModel.UserDetail" Width="1.5" PointX="9" PointY="4.625" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -32,5 +32,6 @@ namespace StoreFront.DATA.EF
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Status> Status { get; set; }
         public virtual DbSet<SubType> SubTypes { get; set; }
+        public virtual DbSet<UserDetail> UserDetails { get; set; }
     }
 }
