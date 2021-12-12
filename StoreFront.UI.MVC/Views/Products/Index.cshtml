@@ -4,60 +4,95 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @if (User.IsInRole("Admin"))
+    {
+        @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary" })
+    }
+    @Html.ActionLink("Grid View", "ProductGrid", null, new { @class = "btn btn-info" })
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.ProductName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Price)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.UnitsSold)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ProductImage)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ProductType1.ProductTypeName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Status.StatusName)
-        </th>
-        <th></th>
-    </tr>
+<table class="table data-table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            @if (User.IsInRole("Admin"))
+            {
+                <th>
+                    @Html.DisplayNameFor(model => model.UnitsSold)
+                </th>
+            }
+            <th>
+                @Html.DisplayNameFor(model => model.ProductImage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductType1.ProductTypeName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status.StatusName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            @if (User.IsInRole("Admin"))
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.UnitsSold)
+                </td>
+            }
+            <td>
+                <img src="~/Content/imgstore/products/t_@item.ProductImage" alt="product image" title="@item.ProductName" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductType1.ProductTypeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status.StatusName)
+            </td>
+            <td>
+                @if (User.IsInRole("Admin"))
+                {
+                    <a href="@Url.Action("Edit", "Products", new { id=item.ProductID })">
+                        <i class="fa fa-pencil-square-o action-icons" aria-hidden="true"></i>
+                    </a>
+                }
+                <a href="@Url.Action("Details", "Products", new { id=item.ProductID })">
+                    <i class="fa fa-info-circle action-icons" aria-hidden="true"></i>
+                </a>
+                @if (User.IsInRole("Admin"))
+                {
+                    <a href="@Url.Action("Delete", "Products", new {id=item.ProductID})">
+                        <i class="fa fa-trash-o action-icons" aria-hidden="true"></i>
+                    </a>
+                }
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.ProductName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Price)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.UnitsSold)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ProductImage)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ProductType1.ProductTypeName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Status.StatusName)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ProductID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ProductID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ProductID })
-        </td>
-    </tr>
+@section scripts{
+    <script>
+        //Apply datatables plugin
+        $(document).ready(function () {
+            $(".data-table").DataTable()
+        });
+    </script>
 }
 
-</table>

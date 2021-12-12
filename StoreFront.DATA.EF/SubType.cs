@@ -14,7 +14,16 @@ namespace StoreFront.DATA.EF
     
     public partial class SubType
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public SubType()
+        {
+            this.ProductTypes = new HashSet<ProductType>();
+        }
+    
         public int SubTypeID { get; set; }
         public string SubTypeName { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ProductType> ProductTypes { get; set; }
     }
 }

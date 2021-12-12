@@ -17,46 +17,40 @@ namespace StoreFront.UI.MVC.Controllers
         // GET: ProductTypes
         public ActionResult Index()
         {
-            return View(db.ProductTypes.ToList());
+            var productTypes = db.ProductTypes.Include("SubTypes");
+            return View(productTypes.ToList());
+        }
+
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public JsonResult AjaxDelete(int id)
+        {
+            ProductType pType = db.ProductTypes.Find(id);
+            db.ProductTypes.Remove(pType);
+            db.SaveChanges();
+            string ConfirmMessage = string.Format("Delete publisher '{0}' from the database!",
+                pType.ProductTypeName);
+            return Json(new {id = id, ConfirmMessage = ConfirmMessage });
         }
 
         // GET: ProductTypes/Details/5
-        public ActionResult Details(int? id)
+        [HttpGet]
+        public PartialViewResult ProductTypeDetails(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            ProductType productType = db.ProductTypes.Find(id);
-            if (productType == null)
-            {
-                return HttpNotFound();
-            }
-            return View(productType);
+            ProductType pType = db.ProductTypes.Find(id);
+            return PartialView(pType);
         }
 
         // GET: ProductTypes/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: ProductTypes/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "TypeID,ProductTypeName,SubTypeID")] ProductType productType)
+        public JsonResult AjaxCreate(ProductType productType)
         {
-            if (ModelState.IsValid)
-            {
-                db.ProductTypes.Add(productType);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            return View(productType);
+            db.ProductTypes.Add(productType);
+            db.SaveChanges();
+            return Json(productType);
         }
+                
 
         // GET: ProductTypes/Edit/5
         public ActionResult Edit(int? id)
@@ -89,30 +83,20 @@ namespace StoreFront.UI.MVC.Controllers
             return View(productType);
         }
 
-        // GET: ProductTypes/Delete/5
-        public ActionResult Delete(int? id)
+        [HttpGet]
+        public PartialViewResult ProductTypeEdit(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            ProductType productType = db.ProductTypes.Find(id);
-            if (productType == null)
-            {
-                return HttpNotFound();
-            }
-            return View(productType);
+            ProductType pType = db.ProductTypes.Find(id);
+            return PartialView(pType);
         }
 
-        // POST: ProductTypes/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public JsonResult AjaxEdit(ProductType productType)
         {
-            ProductType productType = db.ProductTypes.Find(id);
-            db.ProductTypes.Remove(productType);
+            db.Entry(productType).State = EntityState.Modified;
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return Json(productType);
         }
 
         protected override void Dispose(bool disposing)

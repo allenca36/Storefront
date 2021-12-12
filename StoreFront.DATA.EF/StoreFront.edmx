@@ -135,6 +135,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ProductType_SubType">
+          <End Role="SubType" Type="Self.SubType" Multiplicity="0..1" />
+          <End Role="ProductType" Type="Self.ProductType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SubType">
+              <PropertyRef Name="SubTypeID" />
+            </Principal>
+            <Dependent Role="ProductType">
+              <PropertyRef Name="SubTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="StoreFrontModelStoreContainer">
           <EntitySet Name="Departments" EntityType="Self.Departments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Employees" EntityType="Self.Employees" Schema="dbo" store:Type="Tables" />
@@ -163,6 +175,10 @@
           <AssociationSet Name="FK_Products_Status" Association="Self.FK_Products_Status">
             <End Role="Status" EntitySet="Status" />
             <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductType_SubType" Association="Self.FK_ProductType_SubType">
+            <End Role="SubType" EntitySet="SubType" />
+            <End Role="ProductType" EntitySet="ProductType" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -216,6 +232,7 @@
           <Property Name="ProductTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="SubTypeID" Type="Int32" />
           <NavigationProperty Name="Products" Relationship="Self.FK_Products_ProductType" FromRole="ProductType" ToRole="Products" />
+          <NavigationProperty Name="SubType" Relationship="StoreFrontModel.FK_ProductType_SubType" FromRole="ProductType" ToRole="SubType" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -239,6 +256,7 @@
           </Key>
           <Property Name="SubTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="SubTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="ProductTypes" Relationship="StoreFrontModel.FK_ProductType_SubType" FromRole="SubType" ToRole="ProductType" />
         </EntityType>
         <Association Name="FK_Employees_Departments">
           <End Role="Departments" Type="Self.Department" Multiplicity="0..1" />
@@ -329,6 +347,10 @@
             <End Role="Products" EntitySet="Products" />
           </AssociationSet>
           <EntitySet Name="UserDetails" EntityType="StoreFrontModel.UserDetail" />
+          <AssociationSet Name="FK_ProductType_SubType" Association="StoreFrontModel.FK_ProductType_SubType">
+            <End Role="SubType" EntitySet="SubTypes" />
+            <End Role="ProductType" EntitySet="ProductTypes" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="UserDetail">
           <Key>
@@ -339,6 +361,18 @@
           <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="FavoriteColor" Type="String" MaxLength="7" FixedLength="false" Unicode="false" />
         </EntityType>
+        <Association Name="FK_ProductType_SubType">
+          <End Type="StoreFrontModel.SubType" Role="SubType" Multiplicity="0..1" />
+          <End Type="StoreFrontModel.ProductType" Role="ProductType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SubType">
+              <PropertyRef Name="SubTypeID" />
+            </Principal>
+            <Dependent Role="ProductType">
+              <PropertyRef Name="SubTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->

@@ -7,21 +7,18 @@
 
     <!-- Favicons -->
     <link href="img/favicon.png" rel="icon">
-    <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
+    <link href="img/apple-touch-icon.png" rel="apple-touch-icon" />
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Raleway:400,700,900|Lato:400,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:400,700,900|Lato:400,900" rel="stylesheet" />
 
     <!-- Bootstrap CSS File -->
-    <link href="~/Content/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
+    <link href="~/Content/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <!-- Libraries CSS Files -->
-    <link href="~Content/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <link href="~Content/lib/prettyphoto/css/prettyphoto.css" rel="stylesheet">
-    <link href="~Content/lib/hover/hoverex-all.css" rel="stylesheet">
-
+    <link href="~/Content/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link hhref="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css" rel="stylesheet" />
     <!-- Main Stylesheet File -->
-    <link href="~/Content/css/style.css" rel="stylesheet">
+    <link href="~/Content/css/style.css" rel="stylesheet" />
 
     <!-- =======================================================
       Template Name: Solid
@@ -46,9 +43,9 @@
                 <a class="navbar-brand" href="@Url.Action("Index","Home")">Gamestore</a>
             </div>
             <div class="navbar-collapse collapse navbar-right">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="@Url.Action("Index","Home")">Home</a></li>
-                    <li><a href="@Url.Action("Store", "Home")">Store</a></li>
+                <ul class="nav navbar-nav menu">
+                    <li><a href="@Url.Action("Index","Home")">Home</a></li>
+                    <li><a href="@Url.Action("Index", "Products")">Store</a></li>
                     <li><a href="@Url.Action("About","Home")">About</a></li>
                     <li><a href="@Url.Action("Contact", "Home")">Contact</a></li>
                     <li>
@@ -57,20 +54,51 @@
                             @Html.Partial("_LoginPartial")
                         </div>
                     </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">PAGES <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="@Url.Action("Index", "Department")">Departments</a></li>
-                            <li><a href="@Url.Action("Index", "Employee")">Employees</a></li>
-                            <li><a href="@Url.Action("Index", "Role")">Roles</a></li>
+                   @* @if (User.IsInRole("Admin"))
+                    {
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">PAGES <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
 
-                        </ul>
-                    </li>
+                                <li><a href="@Url.Action("Index", "ProductTypes")">ProductType</a></li>
+                                @*<li><a href="@Url.Action("Index", "Status")">Status</a></li>
+                                <li><a href="@Url.Action("Index", "SubTypes")">SubType</a></li>
+                                @*<li><a href="@Url.Action("Index", "Departments")">Departments</a></li>
+                                <li><a href="@Url.Action("Index", "Employees")">Employees</a></li>
+                                @*<li><a href="@Url.Action("Index", "Roles")">Employee Roles</a></li>
+
+                            </ul>*@
+                        </li>
+                        <li class="nav-item">
+                            @if (Session["cart"] != null && ((Dictionary<int, StoreFront.UI.MVC.Models.CartItemViewModel>)Session["cart"]).Count > 0)
+                            {
+                                <a class="dropdown-item" href="/ShoppingCart/Index">
+                                    Cart <i class="fa fa-shopping-cart"></i>
+                                </a>
+                            }
+                            else
+                            {
+                                @Html.ActionLink("Cart", "Index", "ShoppingCart")
+                            }
+                        </li>
+                    }
                 </ul>
             </div>
             <!--/.nav-collapse -->
         </div>
     </div>
+
+    <!--BLUE WRAP-->
+    <div id="blue">
+        <div class="container">
+            <div class="row">
+                <h3>@ViewBag.Title</h3>
+            </div>
+            <!-- /row -->
+        </div>
+        <!-- /container -->
+    </div>
+    <!-- /blue -->
 
     @RenderBody()
 
@@ -78,11 +106,20 @@
     <div id="footerwrap">
         <div class="container">
             <div class="row">
-                <div class="col-lg-4">
-                    <h4>About</h4>
-                    <div class="hline-w"></div>
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-                </div>
+                @if (Request.IsAuthenticated && User.IsInRole("Admin"))
+
+                {
+                    <div class="col-lg-4">
+                        <h4>Admin Functions</h4>
+                        <div class="hline-w"></div>
+                        <p>
+                            <ul>
+                                <li>@Html.ActionLink("Roles", "Index", "RolesAdmin")</li>
+                                <li>@Html.ActionLink("Users", "Index", "UsersAdmin")</li>
+                            </ul>
+                        </p>
+                    </div>
+                }
                 <div class="col-lg-4">
                     <h4>Social Links</h4>
                     <div class="hline-w"></div>
@@ -109,7 +146,7 @@
     <div id="copyrights">
         <div class="container">
             <p>
-                &copy; Copyrights <strong>Solid</strong>. All Rights Reserved
+                &copy; Copyrights <strong>Chris Allen</strong>. All Rights Reserved
             </p>
             <div class="credits">
                 <!--
@@ -118,7 +155,7 @@
                   Buy the pro version with working PHP/AJAX contact form: https://templatemag.com/solid-bootstrap-business-template/
                   Licensing information: https://templatemag.com/license/
                 -->
-                Created with Solid template by <a href="https://templatemag.com/">TemplateMag</a>
+                Created with Solid template by <a href="https://templatemag.com/">TemplateMag Converted by Chris Allen</a>
             </div>
         </div>
     </div>
@@ -126,14 +163,23 @@
     <!-- JavaScript Libraries -->
     <script src="~/Content/lib/jquery/jquery.min.js"></script>
     <script src="~/Content/lib/bootstrap/js/bootstrap.min.js"></script>
-    <script src="~/Content/lib/php-mail-form/validate.js"></script>
-    <script src="~/Content/lib/prettyphoto/js/prettyphoto.js"></script>
-    <script src="~/Content/lib/isotope/isotope.min.js"></script>
-    <script src="~/Content/lib/hover/hoverdir.js"></script>
-    <script src="~/Content/lib/hover/hoverex.min.js"></script>
-
+    @*@Scripts.Render("~/bundles/template")*@
     <!-- Template Main Javascript File -->
-    <script src="js/main.js"></script>
+    <script src="~/Content/js/main.js"></script>
+    @*<script src="js/main.js"></script>*@
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    
+    <script>
+        $('.menu li').each(function () {
+            if ($(this).find('a').attr('href') == window.location.pathname) {
+                $(this).addClass('active');
+            }
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/jquery.ajax.unobtrusive/3.2.4/jquery.unobtrusive-ajax.min.js"></script>
+
     @RenderSection("scripts", required: false)
 
 </body>

@@ -1,0 +1,35 @@
+﻿@model IEnumerable<StoreFront.DATA.EF.Product>
+@{
+    ViewBag.Title = "Products Grid";
+}
+
+
+<h2>@ViewBag.Title</h2>
+<p>
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-success" })
+    @Html.ActionLink("List View", "Index", null, new { @class = "btn btn-info" })
+</p>
+
+<div id="productGrid">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-3 col-sm-6 col-xs-12 product">
+            <div class="course">
+                <a href="@Url.Action("Details", "Products", new { id = item.ProductID})" class="course-image">
+                    <img src="~/Content/imgstore/products/@item.ProductImage" alt="@item.ProductName" />
+                    <i class="course-link-icon fa fa-link"></i>
+                </a>
+                <a class="course-title" href="@Url.Action("Details","Products", new {id=item.ProductID})">@item.ProductName</a>
+                <div class="course-details">
+                    <span class="course-category">
+                        @Html.DisplayFor(modelItem => item.ProductType)
+                    </span>
+                    <span class="course-price course-free">
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </span>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+

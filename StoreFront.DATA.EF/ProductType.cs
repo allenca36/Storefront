@@ -26,5 +26,6 @@ namespace StoreFront.DATA.EF
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Product> Products { get; set; }
+        public virtual SubType SubType { get; set; }
     }
 }
